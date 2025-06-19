@@ -1,0 +1,31 @@
+{
+  "name": "localhost-public",
+  "version": "1.0.0",
+  "description": "Make your localhost:3000 publicly accessible through tunneling",
+  "main": "index.js",
+  "bin": {
+    "localhost-public": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tunnel",
+    "localhost",
+    "public",
+    "ngrok",
+    "localtunnel"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "localtunnel": "^2.0.2",
+    "commander": "^9.4.1",
+    "chalk": "^4.1.2",
+    "qrcode-terminal": "^0.12.0",
+    "axios": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
