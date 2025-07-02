@@ -8,8 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bin/cli.js",
-    "prepublishOnly": "npm test"
+    "start": "node bin/cli.js"
   },
   "keywords": [
     "localhost",
