@@ -5,6 +5,7 @@ const axios = require("axios");
 const express = require("express");
 const session = require("express-session");
 const httpProxy = require("http-proxy-middleware");
+const crypto = require("crypto");
 
 class LocalhostPublic {
   constructor(options = {}) {
@@ -16,7 +17,7 @@ class LocalhostPublic {
     this.authServer = null;
     this.credentials = options.credentials || {
       username: "admin",
-      password: "password",
+      password: crypto.randomBytes(16),
     };
     this.sessionSecret = options.sessionSecret || "spartan";
     this.visitors = 0;
