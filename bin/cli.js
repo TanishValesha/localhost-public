@@ -10,7 +10,7 @@ const program = new Command();
 program
   .name("localhost-public")
   .description(
-    "Make your localhost publicly accessible with optional authentication"
+    "Make your localhost publicly accessible with optional custom authentication"
   )
   .version("1.0.0");
 
@@ -38,8 +38,6 @@ program
     "--auth-port <number>",
     "port for authentication server (default: original port + 1000)"
   )
-  .option("--no-auth", "disable authentication (default behavior)")
-  .option("--m, --multihost", "two local ports to create a two tunnels")
   .action(async (options) => {
     const port = parseInt(options.port);
 
@@ -52,10 +50,10 @@ program
     }
 
     // Validate TTL
-    if (!/^\d+[smh]$/.test(options.ttl) && options.ttl !== "24h") {
+    if (!/^\d+[smh]$/.test(options.expiry) && options.expiry !== "24h") {
       console.error(
         chalk.red(
-          "Invalid TTL format. Please use a format like '10s', '5m', '1h', or '24h'."
+          "Invalid expiry format. Please use a format like '10s', '5m', '1h', or '24h'."
         )
       );
       process.exit(1);
@@ -99,7 +97,7 @@ program
     const tunnelConfig = {
       port,
       host: options.host,
-      ttl: options.ttl,
+      expiry: options.expiry,
     };
 
     // Configure authentication if enabled
@@ -148,11 +146,10 @@ program
         console.log(chalk.yellow("\nAccess Instructions:"));
         console.log(chalk.white(`   1. Visit: ${chalk.cyan(url)}`));
         console.log(chalk.white("   2. You'll be redirected to login page"));
-        console.log(chalk.white("   3. Enter credentials above"));
+        console.log(chalk.white("   3. Enter above credentials"));
         console.log(chalk.white("   4. Access your application"));
         console.log(chalk.yellow("\nSecurity Notes:"));
-        console.log(chalk.gray("   • Session expires in 24 hours"));
-        console.log(chalk.gray("   • Use /logout to end session"));
+        console.log(chalk.gray(`   • Session expires in ${options.expiry}`));
         console.log(chalk.gray("   • Keep credentials secure"));
         console.log(chalk.blue("=".repeat(50) + "\n"));
 

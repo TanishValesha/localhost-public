@@ -10,7 +10,7 @@ class LocalhostPublic {
   constructor(options = {}) {
     this.port = options.port || 3000;
     this.authPort = options.authPort || this.port + 1000; // Authentication server port
-    this.ttl = options.ttl || "24h";
+    this.expiry = options.expiry || "24h";
     this.host = options.host || "https://loca.lt";
     this.tunnel = null;
     this.authServer = null;
@@ -26,7 +26,6 @@ class LocalhostPublic {
   setupAuthServer() {
     const app = express();
 
-    // Middleware
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
     app.use(
@@ -220,21 +219,6 @@ class LocalhostPublic {
       }
     });
 
-    // Logout route
-    app.get("/logout", (req, res) => {
-      req.session.destroy();
-      res.redirect("/login");
-    });
-
-    // Health check route (bypass auth)
-    app.get("/health", (req, res) => {
-      res.json({
-        status: "ok",
-        port: this.port,
-        authenticated: !!req.session?.authenticated,
-      });
-    });
-
     // Proxy all other requests to the original app (with auth)
     app.use(
       "/",
@@ -251,7 +235,6 @@ class LocalhostPublic {
               <h1>Service Unavailable</h1>
               <p>The application on localhost:${this.port} is not responding.</p>
               <p>Please make sure your application is running.</p>
-              <a href="/logout">Logout</a>
             </body>
           </html>
         `);
@@ -350,23 +333,23 @@ class LocalhostPublic {
     return this.tunnel.url;
   }
 
-  calculateTTL() {
-    const length = this.ttl.length;
-    if (this.ttl[length - 1] === "s") {
-      this.ttl = parseInt(this.ttl.slice(0, length - 1)) * 1000;
-    } else if (this.ttl[length - 1] === "m") {
-      this.ttl = parseInt(this.ttl.slice(0, length - 1)) * 60000;
-    } else if (this.ttl[length - 1] === "h") {
-      this.ttl = parseInt(this.ttl.slice(0, length - 1)) * 3600000;
-    } else if (this.ttl === "24h") {
-      this.ttl = 86400000;
+  calculateExpiry() {
+    const length = this.expiry.length;
+    if (this.expiry[length - 1] === "s") {
+      this.expiry = parseInt(this.expiry.slice(0, length - 1)) * 1000;
+    } else if (this.expiry[length - 1] === "m") {
+      this.expiry = parseInt(this.expiry.slice(0, length - 1)) * 60000;
+    } else if (this.expiry[length - 1] === "h") {
+      this.expiry = parseInt(this.expiry.slice(0, length - 1)) * 3600000;
+    } else if (this.expiry === "24h") {
+      this.expiry = 86400000;
     } else {
       throw new Error(
-        "Invalid TTL format. Please use a format like '10s', '5m', or '1h'."
+        "Invalid expiry format. Please use a format like '10s', '5m', or '1h'."
       );
     }
-    const ttlInMs = this.ttl === "24h" ? 86400000 : this.ttl;
-    return ttlInMs;
+    const expiryInMs = this.expiry === "24h" ? 86400000 : this.expiry;
+    return expiryInMs;
   }
 
   async start() {
@@ -444,11 +427,11 @@ class LocalhostPublic {
         }
       }, 10000);
 
-      const ttlTimeout = setTimeout(() => {
+      const expiryTimeout = setTimeout(() => {
         console.log(chalk.yellow("Tunnel has expired. Stopping..."));
         clearInterval(healthCheckInterval);
         this.stop();
-      }, this.calculateTTL());
+      }, this.calculateExpiry());
 
       // Handle process termination
       process.on("SIGINT", () => {
