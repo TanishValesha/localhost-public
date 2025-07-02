@@ -1,23 +1,49 @@
 {
   "name": "localhost-public",
   "version": "1.0.0",
-  "description": "Make your localhost:3000 publicly accessible through tunneling",
+  "description": "Make your localhost publicly accessible with optional custom authentication through tunneling",
   "main": "index.js",
   "bin": {
     "localhost-public": "./bin/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bin/cli.js",
+    "prepublishOnly": "npm test"
   },
   "keywords": [
-    "tunnel",
     "localhost",
+    "tunnel",
     "public",
     "ngrok",
-    "localtunnel"
+    "localtunnel",
+    "development",
+    "port-forwarding",
+    "authentication",
+    "cli",
+    "webhook",
+    "testing",
+    "proxy",
+    "share"
   ],
-  "author": "Your Name",
+  "author": {
+    "name": "Tanish Valesha",
+    "email": "tanish.valesha@example.com",
+    "url": "https://github.com/TanishValesha"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TanishValesha/localhost-public.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TanishValesha/localhost-public/issues"
+  },
+  "homepage": "https://github.com/TanishValesha/localhost-public#readme",
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "chalk": "^4.1.2",
@@ -28,7 +54,16 @@
     "localtunnel": "^2.0.2",
     "qrcode-terminal": "^0.12.0"
   },
-  "engines": {
-    "node": ">=12.0.0"
-  }
+  "files": [
+    "bin/",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "preferGlobal": true,
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ]
 }
