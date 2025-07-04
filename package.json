@@ -1,6 +1,6 @@
 {
   "name": "localhost-public",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Make your localhost publicly accessible with optional custom authentication through tunneling",
   "main": "index.js",
   "bin": {
@@ -66,7 +66,7 @@
     "tls",
     "secure",
     "encrypted"
-],
+  ],
   "author": {
     "name": "Tanish Valesha",
     "email": "tanish.valesha@example.com",
